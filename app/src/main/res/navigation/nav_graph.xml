@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/SignInFragment">
+
+    <fragment
+        android:id="@+id/SignInFragment"
+        android:name="com.fabricethilaw.gozem.businesscase.SignInFragment"
+        android:label="@string/sign_in_fragment_label"
+        tools:layout="@layout/fragment_sign_in">
+
+        <action
+            android:id="@+id/action_SignIn_to_SignUp"
+            app:destination="@id/SignUpFragment"
+            app:popUpTo="@id/SignUpFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="com.fabricethilaw.gozem.businesscase.SignUpFragment"
+        android:label="@string/sign_up_fragment_label"
+        tools:layout="@layout/fragment_signup">
+
+        <action
+            android:id="@+id/action_SignUp_to_SignIn"
+            app:destination="@id/SignInFragment"
+            app:popUpTo="@id/SignInFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

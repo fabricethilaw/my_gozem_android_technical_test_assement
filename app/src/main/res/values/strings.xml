@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">GoZem BC</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="sign_in_fragment_label">Login</string>
+    <string name="sign_up_fragment_label">Registeration</string>
+
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="full_name">Full name</string>
+    <string name="register">Register</string>
+    <string name="i_already_have_account"><u>I already have an account</u></string>
+    <string name="error_invalid_email">Please enter a valid email address.</string>
+    <string name="error_invalid_password">Please enter a password with at leat 4 characters</string>
+    <string name="confirm_password">Confrm the password</string>
+    <string name="error_confirm_password_not_matching">Passwords do not match.</string>
+</resources>
