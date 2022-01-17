@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.fabricethilaw.gozem.R
 import com.fabricethilaw.gozem.databinding.FragmentSignupBinding
+import com.fabricethilaw.gozem.showMessage
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -18,6 +19,7 @@ class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignupBinding? = null
     private val sharedViewModel by activityViewModels<BusinessCaseViewModel>()
+    private lateinit var progressDialog: DialogProgressBar
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -30,6 +32,7 @@ class SignUpFragment : Fragment() {
 
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
         binding.fragment = this
+        progressDialog = DialogProgressBar(requireContext())
         with(binding.inputFullName) {
             editText?.addTextChangedListener {
                 isErrorEnabled = false
@@ -62,9 +65,13 @@ class SignUpFragment : Fragment() {
         val confirmedPassword = binding.inputConfirmPassword.editText?.text?.toString() ?: ""
 
         if (inputIsValid(name, email, password, confirmedPassword)) {
-            sharedViewModel.register(name, email, password, onError = { _ ->
-            }) { _ ->
-
+            progressDialog.show()
+            sharedViewModel.register(name, email, password, onError = {
+                progressDialog.hide()
+                binding.root.showMessage(R.string.sign_up_error, it)
+            }) {
+                progressDialog.hide()
+                findNavController().navigate(R.id.action_SignUp_to_Home)
             }
         }
 

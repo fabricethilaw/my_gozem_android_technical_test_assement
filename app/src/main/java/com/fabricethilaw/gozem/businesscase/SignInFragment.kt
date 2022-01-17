@@ -1,7 +1,6 @@
 package com.fabricethilaw.gozem.businesscase
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.fabricethilaw.gozem.R
 import com.fabricethilaw.gozem.databinding.FragmentSignInBinding
+import com.fabricethilaw.gozem.showMessage
 
 class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val sharedViewModel by activityViewModels<BusinessCaseViewModel>()
+
+    private lateinit var progressDialog: DialogProgressBar
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,6 +30,7 @@ class SignInFragment : Fragment() {
 
         _binding = FragmentSignInBinding.inflate(inflater)
         binding.fragment = this
+        progressDialog = DialogProgressBar(requireContext())
         with(binding.inputEmail.editText) {
             this?.doOnTextChanged { _, _, _, _ ->
                 binding.inputEmail.isErrorEnabled = false
@@ -45,7 +48,6 @@ class SignInFragment : Fragment() {
 
     private fun emailAndPasswordAreValid(email: String, password: String): Boolean {
 
-        Log.i(this.javaClass.name, "SignIn Input $email, $password")
         val emailIsValid = Validator.validateEmail(email)
         if (!emailIsValid) {
             binding.inputEmail.error = getString(R.string.error_invalid_email)
@@ -61,12 +63,15 @@ class SignInFragment : Fragment() {
     fun signIn() {
         val email: String = binding.inputEmail.editText?.text?.toString() ?: ""
         val password: String = binding.inputPassword.editText?.text.toString()
-        Log.i(this.javaClass.name, "SignIn Input $email, $password")
+
         if (emailAndPasswordAreValid(email, password)) {
+            progressDialog.show()
             sharedViewModel.signIn(email, password, onError = {
-
-            }){
-
+                progressDialog.hide()
+                binding.root.showMessage(R.string.sign_in_error, it)
+            }) {
+                progressDialog.hide()
+                findNavController().navigate(R.id.action_SignIn_to_Home)
             }
         }
     }

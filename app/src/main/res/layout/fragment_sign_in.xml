@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/grid_0_5"
                 android:onClick="@{() -> fragment.goToSignUp()}"
-                android:text="@string/signup"
+                android:text="@string/or_register"
                 android:textAllCaps="false"
                 app:cornerRadius="@dimen/grid_2"
                 app:layout_constraintBottom_toBottomOf="parent"

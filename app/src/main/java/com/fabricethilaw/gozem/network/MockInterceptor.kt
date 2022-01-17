@@ -14,7 +14,8 @@ class MockInterceptor : Interceptor {
         val uri = chain.request().url().uri().toString()
         val responseString: String = when {
             uri.endsWith("authenticate") -> {
-                "Successful authentication"
+                "Successful auth"
+              // chain.request().body().
             }
             uri.endsWith("register") -> {
                 "Successful registration"
