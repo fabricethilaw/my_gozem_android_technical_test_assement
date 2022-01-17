@@ -2,6 +2,7 @@ package com.fabricethilaw.gozem.network
 
 import com.fabricethilaw.gozem.network.model.AuthResponse
 import com.fabricethilaw.gozem.network.model.LoginPayload
+import com.fabricethilaw.gozem.network.model.ProfileItemResponse
 import com.fabricethilaw.gozem.network.model.RegistrationPayload
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -44,7 +45,7 @@ interface ApiService {
     ): Response<AuthResponse>
 
     @GET("profile")
-    suspend fun getData(): Response<Any>
+    suspend fun getData(): Response<List<ProfileItemResponse>>
 
 }
 

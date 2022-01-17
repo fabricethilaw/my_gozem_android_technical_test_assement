@@ -1,17 +1,24 @@
 package com.fabricethilaw.gozem.businesscase
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fabricethilaw.gozem.network.Api
-import com.fabricethilaw.gozem.network.model.AuthResponse
-import com.fabricethilaw.gozem.network.model.LoginPayload
-import com.fabricethilaw.gozem.network.model.RegistrationPayload
+import com.fabricethilaw.gozem.network.model.*
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class BusinessCaseViewModel : ViewModel() {
+    private val _profileContent = MutableLiveData<ProfileContent>()
+    val profileContent: LiveData<ProfileContent> = _profileContent
+    private val _mapContent = MutableLiveData<LocationContent>()
+    val mapContent: LiveData<LocationContent> = _mapContent
+    private val _informationContent = MutableLiveData<InformationContent>()
+    val informationContent: LiveData<InformationContent> = _informationContent
 
     fun signIn(
         email: String,
@@ -62,20 +69,35 @@ class BusinessCaseViewModel : ViewModel() {
                 onError.invoke(e.message.toString())
             }
         }
-
     }
 
 
-    fun getProfile(onError: (String) -> Unit, onSuccess: (String) -> Unit) {
+    fun getProfile(onError: (String) -> Unit, onSuccess: (List<ProfileItemResponse>) -> Unit) {
         viewModelScope.launch {
             try {
                 val resp = Api.webservice.getData()
                 if (resp.isSuccessful) {
-                    onSuccess("Dummy data")
-                } else onError("Error")
+                    setHomeData(resp.body()!!)
+                    onSuccess(resp.body()!!)
+                } else onError(resp.errorBody().toString())
             } catch (e: Exception) {
-                onError("Error")
+                onError(e.message.toString())
             }
+        }
+    }
+
+    private fun setHomeData(data: List<ProfileItemResponse>) {
+        data.firstOrNull { it.type == "profile" }.run {
+            _profileContent.value = this?.content?.mapToProfileContent()
+            Log.i("profile",  _profileContent.value.toString() )
+        }
+        data.firstOrNull { it.type == "map" }.run {
+            _mapContent.value = this?.content?.mapToLocationContent()
+            Log.i("map",  _mapContent.value.toString() )
+        }
+        data.firstOrNull { it.type == "data" }.run {
+            _informationContent.value = this?.content?.mapToInformationContent()
+            Log.i("data",  _informationContent.value.toString() )
         }
     }
 

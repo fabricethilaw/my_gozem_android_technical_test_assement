@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
 }
 
 android {
@@ -52,9 +54,13 @@ dependencies {
     // Retrofit with Moshi Converter
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
-    // Coil
+    // Coil for image loading
     implementation "io.coil-kt:coil:1.4.0"
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    // Maps
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
