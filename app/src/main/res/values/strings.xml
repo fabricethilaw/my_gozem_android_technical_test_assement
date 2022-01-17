@@ -21,5 +21,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_in_error">SignIn error</string>
     <string name="sign_up_error">Error during registration</string>
-    <string name="or_register"><![CDATA[<u>Or register now.</u>]]></string>
+    <string name="or_register"><u>Or register now.</u></string>
 </resources>
