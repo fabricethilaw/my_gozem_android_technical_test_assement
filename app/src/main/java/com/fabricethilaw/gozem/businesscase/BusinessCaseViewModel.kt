@@ -1,6 +1,5 @@
 package com.fabricethilaw.gozem.businesscase
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -88,16 +87,13 @@ class BusinessCaseViewModel : ViewModel() {
 
     private fun setHomeData(data: List<ProfileItemResponse>) {
         data.firstOrNull { it.type == "profile" }.run {
-            _profileContent.value = this?.content?.mapToProfileContent()
-            Log.i("profile",  _profileContent.value.toString() )
-        }
+            _profileContent.value = this?.content?.mapToProfileContent() }
+
         data.firstOrNull { it.type == "map" }.run {
             _mapContent.value = this?.content?.mapToLocationContent()
-            Log.i("map",  _mapContent.value.toString() )
         }
         data.firstOrNull { it.type == "data" }.run {
             _informationContent.value = this?.content?.mapToInformationContent()
-            Log.i("data",  _informationContent.value.toString() )
         }
     }
 
