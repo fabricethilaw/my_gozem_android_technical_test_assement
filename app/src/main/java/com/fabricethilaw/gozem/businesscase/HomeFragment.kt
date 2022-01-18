@@ -114,10 +114,9 @@ class HomeFragment : Fragment() {
         val manager =
             requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            checkGPSEnable()
-        }
-        binding.root.showMessage(R.string.gps_disabled_want_to_enable) {
-            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            binding.root.showMessage(R.string.gps_disabled_want_to_enable) {
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
         }
 
     }
