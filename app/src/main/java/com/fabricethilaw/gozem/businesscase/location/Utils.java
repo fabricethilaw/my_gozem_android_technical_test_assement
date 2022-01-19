@@ -12,13 +12,12 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class Utils {
+    static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates";
 
     private Utils() {
         // It is the constructor
     }
 
-
-    static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates";
 
     /**
      * Returns true if requesting location updates, otherwise returns false.

@@ -103,10 +103,6 @@ public class LocationUpdatesService extends Service {
      */
     private Location mLocation;
 
-    public LocationUpdatesService() {
-        // It is the constructor
-    }
-
     @Override
     public void onCreate() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

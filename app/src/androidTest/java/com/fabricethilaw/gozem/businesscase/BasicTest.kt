@@ -17,6 +17,9 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class BasicTest {
+    /**
+     * Basic instrumented test for Sign in  and Signup UI navigation
+     */
     @Test
     fun navigationBetweenSignInAndSIgnUpFlow() {
         // Launch the main activity
