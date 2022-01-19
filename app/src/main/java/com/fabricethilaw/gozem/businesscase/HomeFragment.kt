@@ -11,7 +11,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,15 +89,12 @@ class HomeFragment : Fragment(), EchoTarget {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressDialog.show()
-        Log.i("KKK", "onViewCreated")
         sharedViewModel.getProfile(onError = {
             progressDialog.hide()
             binding.root.showMessage(R.string.error_profile, it)
         }) {
             progressDialog.hide()
-            Log.i("KKK", "getProfile_response")
             it?.source?.let { url ->
-                Log.i("KKK", "KKK $url")
                 subscribeToWebSocketUpdates(url)
             }
 
@@ -224,21 +220,12 @@ class HomeFragment : Fragment(), EchoTarget {
             locationUpdatesReceiver,
             IntentFilter(ACTION_BROADCAST)
         )
-        Log.i("KKK", "onresume")
-        /* if (this::presenter.isInitialized) {
-             presenter.takeTarget(this)
-         }*/
     }
 
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(requireActivity())
             .unregisterReceiver(locationUpdatesReceiver)
-        Log.i("KKK", "onPause")
-        /*if (this::presenter.isInitialized) {
-            presenter.dropTarget()
-        }*/
-
     }
 
 

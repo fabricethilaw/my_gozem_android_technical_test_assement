@@ -75,20 +75,18 @@ class BusinessCaseViewModel : ViewModel() {
 
     fun getProfile(onError: (String) -> Unit, onSuccess: (InformationContent?) -> Unit) {
         viewModelScope.launch {
-            //  try {
-            val resp = Api.webservice.getData()
-            if (resp.isSuccessful) {
-
-                onSuccess(setHomeData(resp.body()!!))
-                Log.i("resp", resp.body()!!.toString())
-            } else {
-                Log.i("error", "request not 200")
-                onError(resp.errorBody().toString())
-            }
-            //  } catch (e: Exception) {
-            //     Log.i("error", e.message.toString())
-            //     onError(e.message.toString())
-            // }
+             try {
+                 val resp = Api.webservice.getData()
+                 if (resp.isSuccessful) {
+                     onSuccess(setHomeData(resp.body()!!))
+                     Log.i("resp", resp.body()!!.toString())
+                 } else {
+                     Log.i("error", "request not 200")
+                     onError(resp.errorBody().toString())
+                 }
+             } catch (e: Exception) {
+                 onError(e.message.toString())
+             }
         }
     }
 

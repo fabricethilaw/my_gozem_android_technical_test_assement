@@ -84,6 +84,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
+                        tools:text="exemple@gmail.com"
                         tools:ignore="SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -113,6 +114,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:singleLine="true"
+                        tools:text="123456"
                         tools:ignore="SpeakableTextPresentCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -139,7 +141,7 @@
                 app:layout_constraintVertical_bias="0.1" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_signup"
+                android:id="@+id/go_to_signup"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
