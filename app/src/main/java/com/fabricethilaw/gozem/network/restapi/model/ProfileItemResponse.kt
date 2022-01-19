@@ -1,4 +1,4 @@
-package com.fabricethilaw.gozem.network.model
+package com.fabricethilaw.gozem.network.restapi.model
 
 import com.squareup.moshi.Json
 
@@ -37,7 +37,7 @@ fun Map<String, Any>.mapToInformationContent(): InformationContent {
 data class ProfileContent(val image: String?, val name: String?, val email: String?)
 data class LocationContent(
     val title: String?,
-    val mapMarker: String,
+    val mapMarker: String?,
     val latitude: Double?,
     val longitude: Double?
 )

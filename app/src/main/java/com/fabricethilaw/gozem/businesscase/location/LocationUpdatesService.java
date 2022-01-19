@@ -47,7 +47,7 @@ import com.google.android.gms.location.LocationServices;
 public class LocationUpdatesService extends Service {
 
     private static final String PACKAGE_NAME =
-            "com.google.android.gms.location.sample.locationupdatesforegroundservice";
+            "com.fabricethilaw.gozem.businesscase.location.locationupdatesforegroundservice";
     public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
     public static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
     private static final String TAG = LocationUpdatesService.class.getSimpleName();
@@ -162,7 +162,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // Called when a client (MainActivity in case of this sample) comes to the foreground
+        // Called when a client (MainActivity in our case) comes to the foreground
         // and binds with this service. The service should cease to be a foreground service
         // when that happens.
         stopForeground(true);
@@ -172,7 +172,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public void onRebind(Intent intent) {
-        // Called when a client (MainActivity in case of this sample) returns to the foreground
+        // Called when a client (MainActivity in our case) returns to the foreground
         // and binds once again with this service. The service should cease to be a foreground
         // service when that happens.
         stopForeground(true);
@@ -183,7 +183,7 @@ public class LocationUpdatesService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
 
-        // Called when the last client (MainActivity in case of this sample) unbinds from this
+        // Called when the last client (MainActivity in our case) unbinds from this
         // service. If this method is called due to a configuration change in MainActivity, we
         // do nothing. Otherwise, we make this service a foreground service.
         if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
@@ -199,8 +199,7 @@ public class LocationUpdatesService extends Service {
     }
 
     /**
-     * Makes a request for location updates. Note that in this sample we merely log the
-     * {@link SecurityException}.
+     * Makes a request for location updates.
      */
     public void requestLocationUpdates() {
         Utils.setRequestingLocationUpdates(this, true);
@@ -214,8 +213,7 @@ public class LocationUpdatesService extends Service {
     }
 
     /**
-     * Removes location updates. Note that in this sample we merely log the
-     * {@link SecurityException}.
+     * Removes location updates
      */
     public void removeLocationUpdates() {
         try {

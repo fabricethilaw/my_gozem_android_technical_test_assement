@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.fabricethilaw.gozem.R
+import com.fabricethilaw.gozem.businesscase.extensions.safeNavigate
+import com.fabricethilaw.gozem.businesscase.extensions.showMessage
 import com.fabricethilaw.gozem.databinding.FragmentSignupBinding
-import com.fabricethilaw.gozem.showMessage
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -71,7 +72,7 @@ class SignUpFragment : Fragment() {
                 binding.root.showMessage(R.string.sign_up_error, it)
             }) {
                 progressDialog.hide()
-                findNavController().navigate(R.id.action_SignUp_to_Home)
+                findNavController().safeNavigate(SignUpFragmentDirections.actionSignUpToHome())
             }
         }
 
@@ -107,7 +108,7 @@ class SignUpFragment : Fragment() {
     }
 
     fun goToSignIn() {
-        findNavController().navigate(R.id.action_SignUp_to_SignIn)
+        findNavController().safeNavigate(SignUpFragmentDirections.actionSignUpToSignIn())
     }
 
     override fun onDestroyView() {

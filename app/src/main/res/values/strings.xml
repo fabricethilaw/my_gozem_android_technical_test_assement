@@ -31,7 +31,17 @@
     <string name="launch_activity">Open %s</string>
     <string name="location_updated">Location updated at %s</string>
     <string name="location_permission">Permission for locations</string>
+    <string name="gps_disabled_want_to_enable">Your GPS seems to be disabled, do you want to enable it?</string>
+
     <string name="yes">YES</string>
     <string name="no">NO</string>
-    <string name="gps_disabled_want_to_enable">Your GPS seems to be disabled, do you want to enable it?</string>
+
+    <!-- Semantic timestamp -->
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="just_now">now</string>
+    <string name="some_minutes_ago">%d minutes ago</string>
+    <string name="one_minute_ago">1 minute ago</string>
+    <string name="some_hours_ago">%d hour ago</string>
+    <string name="one_hour_ago">1 hour ago</string>
 </resources>

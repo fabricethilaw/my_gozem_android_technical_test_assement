@@ -1,6 +1,7 @@
-package com.fabricethilaw.gozem
+package com.fabricethilaw.gozem.businesscase.extensions
 
 import android.view.View
+import com.fabricethilaw.gozem.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun View.showMessage(
@@ -31,7 +32,7 @@ fun View.showMessage(
             onPositiveAction()
         }
         .setNegativeButton(R.string.no) { dialog, _ ->
-            dialog.cancel()
+            dialog.dismiss()
         }
         .show()
 }

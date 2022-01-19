@@ -1,15 +1,17 @@
 package com.fabricethilaw.gozem.businesscase
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fabricethilaw.gozem.network.Api
-import com.fabricethilaw.gozem.network.model.*
+import com.fabricethilaw.gozem.network.restapi.model.*
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class BusinessCaseViewModel : ViewModel() {
     private val _profileContent = MutableLiveData<ProfileContent>()
@@ -71,30 +73,34 @@ class BusinessCaseViewModel : ViewModel() {
     }
 
 
-    fun getProfile(onError: (String) -> Unit, onSuccess: (List<ProfileItemResponse>) -> Unit) {
+    fun getProfile(onError: (String) -> Unit, onSuccess: (InformationContent?) -> Unit) {
         viewModelScope.launch {
-            try {
-                val resp = Api.webservice.getData()
-                if (resp.isSuccessful) {
-                    setHomeData(resp.body()!!)
-                    onSuccess(resp.body()!!)
-                } else onError(resp.errorBody().toString())
-            } catch (e: Exception) {
-                onError(e.message.toString())
+            //  try {
+            val resp = Api.webservice.getData()
+            if (resp.isSuccessful) {
+
+                onSuccess(setHomeData(resp.body()!!))
+                Log.i("resp", resp.body()!!.toString())
+            } else {
+                Log.i("error", "request not 200")
+                onError(resp.errorBody().toString())
             }
+            //  } catch (e: Exception) {
+            //     Log.i("error", e.message.toString())
+            //     onError(e.message.toString())
+            // }
         }
     }
 
-    private fun setHomeData(data: List<ProfileItemResponse>) {
+    private fun setHomeData(data: List<ProfileItemResponse>): InformationContent? {
         data.firstOrNull { it.type == "profile" }.run {
-            _profileContent.value = this?.content?.mapToProfileContent() }
-
+            _profileContent.value = this?.content?.mapToProfileContent()
+            Log.i("profile", _profileContent.value.toString())
+        }
         data.firstOrNull { it.type == "map" }.run {
             _mapContent.value = this?.content?.mapToLocationContent()
+            Log.i("map", _mapContent.value.toString())
         }
-        data.firstOrNull { it.type == "data" }.run {
-            _informationContent.value = this?.content?.mapToInformationContent()
-        }
+        return data.firstOrNull { it.type == "data" }?.content?.mapToInformationContent()
     }
-
 }

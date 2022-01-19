@@ -7,14 +7,18 @@ import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.afollestad.assent.Permission.ACCESS_FINE_LOCATION
@@ -22,19 +26,27 @@ import com.afollestad.assent.askForPermissions
 import com.afollestad.assent.rationale.createDialogRationale
 import com.fabricethilaw.gozem.BuildConfig
 import com.fabricethilaw.gozem.R
+import com.fabricethilaw.gozem.businesscase.extensions.safeNavigate
+import com.fabricethilaw.gozem.businesscase.extensions.showMessage
 import com.fabricethilaw.gozem.businesscase.location.LocationUpdatesService
 import com.fabricethilaw.gozem.businesscase.location.LocationUpdatesService.ACTION_BROADCAST
 import com.fabricethilaw.gozem.databinding.FragmentHomeBinding
-import com.fabricethilaw.gozem.showMessage
+import com.fabricethilaw.gozem.network.websocket.EchoTarget
+import com.fabricethilaw.gozem.network.websocket.MessagePresenter
+import com.fabricethilaw.gozem.network.websocket.MessageRepository
+import com.fabricethilaw.gozem.network.websocket.WebSocketServiceProvider
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), EchoTarget {
 
-
+    private lateinit var presenter: MessagePresenter
     private val sharedViewModel by activityViewModels<BusinessCaseViewModel>()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -50,6 +62,8 @@ class HomeFragment : Fragment() {
     private var mService: LocationUpdatesService? = null
     private var mServiceIsBound: Boolean = false
 
+    private val checkGPSState = MutableStateFlow(false)
+
     // The BroadcastReceiver used to listen from broadcasts from the service.
     private val locationUpdatesReceiver: LocationsUpdatesReceiver = LocationsUpdatesReceiver()
 
@@ -64,17 +78,29 @@ class HomeFragment : Fragment() {
         binding.viewModel = sharedViewModel
         progressDialog = DialogProgressBar(requireContext())
 
+        lifecycleScope.launch {
+            checkGPSState.collectLatest { checkGPS ->
+                if (checkGPS) checkGPSEnable()
+            }
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressDialog.show()
+        Log.i("KKK", "onViewCreated")
         sharedViewModel.getProfile(onError = {
             progressDialog.hide()
             binding.root.showMessage(R.string.error_profile, it)
         }) {
             progressDialog.hide()
+            Log.i("KKK", "getProfile_response")
+            it?.source?.let { url ->
+                Log.i("KKK", "KKK $url")
+                subscribeToWebSocketUpdates(url)
+            }
 
             val rationaleHandler = createDialogRationale(R.string.location_permission) {
                 onPermission(ACCESS_FINE_LOCATION, getString(R.string.fine_location_rationale))
@@ -87,17 +113,27 @@ class HomeFragment : Fragment() {
                 val permissionsGranted = result.isAllGranted(ACCESS_FINE_LOCATION)
                 if (permissionsGranted) {
                     setupMap()
-                    checkGPSEnable()
+                    lifecycleScope.launch { checkGPSState.emit(true) }
                 } else {
                     binding.root.showMessage(
                         R.string.location_permission,
                         getString(R.string.fine_location_rationale)
                     ) {
-                        findNavController().navigate(R.id.SignInFragment)
+                        findNavController().safeNavigate(HomeFragmentDirections.actionHomeToSignIn())
                     }
                 }
             }
+        }
+    }
 
+    private fun subscribeToWebSocketUpdates(source: String) {
+        Handler(Looper.getMainLooper()).post {
+            val client = WebSocketServiceProvider()
+                .getWebSocketClient(source)
+            val repository = MessageRepository(client)
+            presenter = MessagePresenter(repository)
+            presenter.takeTarget(this)
+            onResume()
         }
     }
 
@@ -106,7 +142,6 @@ class HomeFragment : Fragment() {
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
     }
 
 
@@ -118,7 +153,6 @@ class HomeFragment : Fragment() {
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
         }
-
     }
 
     private fun trackUserPosition(googleMap: GoogleMap) {
@@ -137,7 +171,6 @@ class HomeFragment : Fragment() {
         // otherwise update track the device location
         googleMap.isMyLocationEnabled = true
         mService?.requestLocationUpdates()
-
     }
 
     private fun tellUserWeNeedGPSPermission() {
@@ -156,7 +189,6 @@ class HomeFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
-
     }
 
     // Monitors the state of the connection to the service.
@@ -192,12 +224,21 @@ class HomeFragment : Fragment() {
             locationUpdatesReceiver,
             IntentFilter(ACTION_BROADCAST)
         )
+        Log.i("KKK", "onresume")
+        /* if (this::presenter.isInitialized) {
+             presenter.takeTarget(this)
+         }*/
     }
 
     override fun onPause() {
+        super.onPause()
         LocalBroadcastManager.getInstance(requireActivity())
             .unregisterReceiver(locationUpdatesReceiver)
-        super.onPause()
+        Log.i("KKK", "onPause")
+        /*if (this::presenter.isInitialized) {
+            presenter.dropTarget()
+        }*/
+
     }
 
 
@@ -252,6 +293,17 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun addMessage(message: String) {
+        binding.information.text = message
+    }
+
+    override fun setMessages(messages: List<String>) {
+        binding.information.append(messages.joinToString("\n"))
+    }
+
+    override fun clearAllMessages() {
+        binding.information.text = ""
+    }
 
 }
 

@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.fabricethilaw.gozem.R
+import com.fabricethilaw.gozem.businesscase.extensions.safeNavigate
+import com.fabricethilaw.gozem.businesscase.extensions.showMessage
 import com.fabricethilaw.gozem.databinding.FragmentSignInBinding
-import com.fabricethilaw.gozem.showMessage
 
 class SignInFragment : Fragment() {
 
@@ -71,14 +72,16 @@ class SignInFragment : Fragment() {
                 binding.root.showMessage(R.string.sign_in_error, it)
             }) {
                 progressDialog.hide()
-                findNavController().navigate(R.id.action_SignIn_to_Home)
+                findNavController().safeNavigate(SignInFragmentDirections.actionSignInToHome())
             }
         }
     }
 
 
     fun goToSignUp() {
-        findNavController().navigate(R.id.action_SignIn_to_SignUp)
+        findNavController().safeNavigate(
+            SignInFragmentDirections.actionSignInToSignUp()
+        )
     }
 
     override fun onDestroyView() {

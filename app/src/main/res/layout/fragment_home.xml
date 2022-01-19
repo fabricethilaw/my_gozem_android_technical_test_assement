@@ -104,7 +104,7 @@
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#FF9800"
+                android:background="#E4A445"
                 android:gravity="center"
                 android:paddingVertical="@dimen/grid_0_5"
                 android:textColor="@color/white"

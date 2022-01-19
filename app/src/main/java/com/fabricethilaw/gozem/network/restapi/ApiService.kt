@@ -1,9 +1,9 @@
 package com.fabricethilaw.gozem.network
 
-import com.fabricethilaw.gozem.network.model.AuthResponse
-import com.fabricethilaw.gozem.network.model.LoginPayload
-import com.fabricethilaw.gozem.network.model.ProfileItemResponse
-import com.fabricethilaw.gozem.network.model.RegistrationPayload
+import com.fabricethilaw.gozem.network.restapi.model.AuthResponse
+import com.fabricethilaw.gozem.network.restapi.model.LoginPayload
+import com.fabricethilaw.gozem.network.restapi.model.ProfileItemResponse
+import com.fabricethilaw.gozem.network.restapi.model.RegistrationPayload
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
