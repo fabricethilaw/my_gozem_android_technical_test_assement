@@ -5,7 +5,7 @@
  App Features :
 - RESTful webservice integration (Authentication flow)
 - Google Map integration
-- Live loction tracking
+- Live location tracking
 - Websocket implementation
 
 Tech Stack :
