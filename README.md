@@ -10,7 +10,7 @@ and track his/her GPS location in real time.
 
 ### A mock server created with Postman
 
-It provides a mocked RESTful API interface exposing 3 endpoints :
+For the case, I created a mocked RESTful API interface exposing 3 endpoints :
  * Authentication endpoint: 	**POST {server_url}/authenticate**
  * Registration endpoint:	**POST {server_url}/register**
  * Registration endpoint:	**GET {server_url}/profile**
