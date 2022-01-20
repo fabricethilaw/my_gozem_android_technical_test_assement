@@ -2,7 +2,7 @@
     <string name="app_name">GoZem BC</string>
     <!-- Strings used for fragments for navigation -->
     <string name="sign_in_fragment_label">Login</string>
-    <string name="sign_up_fragment_label">Registeration</string>
+    <string name="sign_up_fragment_label">Registration</string>
 
 
     <string name="email">Email</string>
